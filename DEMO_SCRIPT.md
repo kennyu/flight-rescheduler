@@ -1,4 +1,4 @@
-# Flight Rescheduler v2 - Demo Script
+# Flight Rescheduler - Demo Script
 
 ## Demo Overview
 **Duration:** 5-10 minutes  
@@ -23,7 +23,7 @@
 ### Part 1: System Introduction (30 seconds)
 
 **Script:**
-> "Welcome to the Flight Rescheduler v2! This is an AI-powered system that automatically monitors weather conditions for scheduled flight lessons, detects conflicts based on pilot training levels, and generates optimized reschedule suggestions. The system runs entirely on Convex for the backend with a real-time React frontend."
+> "Welcome to the Flight Rescheduler! This is an AI-powered system that automatically monitors weather conditions for scheduled flight lessons, detects conflicts based on pilot training levels, and generates optimized reschedule suggestions. The system runs entirely on Convex for the backend with a real-time React frontend."
 
 **Actions:**
 - Scroll through dashboard overview
@@ -287,7 +287,7 @@
 ## Demo Conclusion (30 seconds)
 
 **Script:**
-> "To summarize, the Flight Rescheduler v2 provides:
+> "To summarize, the Flight Rescheduler provides:
 > - ✅ Automated weather monitoring with training-level-specific minimums
 > - ✅ Real-time conflict detection and notifications
 > - ✅ AI-powered reschedule suggestions

@@ -1,4 +1,4 @@
-# Flight Rescheduler v2
+# Flight Rescheduler
 
 AI-powered flight lesson rescheduling system with weather monitoring and real-time notifications.
 

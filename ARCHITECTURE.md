@@ -1,4 +1,4 @@
-# Flight Rescheduler v2 - System Architecture
+# Flight Rescheduler - System Architecture
 
 ## Overview
 
