@@ -1,0 +1,241 @@
+{
+  "master": {
+    "tasks": [
+      {
+        "id": 1,
+        "title": "Set Up Convex Database Schema",
+        "description": "Design and implement Convex schemas for Students, Flight Bookings, Weather Data, Reschedule Options, and Notifications.",
+        "details": "Define TypeScript Convex schemas for all required data models. Use Convex schema validation for type safety. Ensure all fields from the PRD are included and normalized. Implement indexes for efficient querying (e.g., by studentId, bookingId, status).\n<info added on 2025-11-09T09:37:07.586Z>\nComprehensive Convex database schema implemented with 8 tables: students (with training levels), instructors, flightBookings (with status tracking), weatherData (cached with TTL), weatherConflicts (with severity), rescheduleOptions (AI suggestions), notifications (4 types), and auditLog (action history). All schemas use Convex validators for full TypeScript type safety and enforce training level enums for weather minimums. Over 15 indexes added for query optimization. Real-time subscription support and timestamp tracking included on all tables. Files created: convex/schema.ts (with documentation), convex/tsconfig.json, convex.json, tsconfig.json, README.md, and updated package.json with dev scripts. Schema is production-ready and fulfills all PRD requirements, including weather minimums, AI integration, and real-time updates.\n</info added on 2025-11-09T09:37:07.586Z>",
+        "testStrategy": "Write unit tests to validate schema constraints and type safety. Attempt to insert invalid data and verify rejection. Confirm all CRUD operations work as expected.",
+        "priority": "high",
+        "dependencies": [],
+        "status": "done",
+        "subtasks": []
+      },
+      {
+        "id": 2,
+        "title": "Implement Flight Booking CRUD Operations",
+        "description": "Create Convex mutations and queries for creating, reading, updating, and deleting flight bookings.",
+        "details": "Implement TypeScript functions for booking creation, update (status changes), deletion, and retrieval. Ensure all business logic (e.g., status transitions) is enforced. Integrate with the Convex schema from Task 1.\n<info added on 2025-11-09T09:40:23.752Z>\nComprehensive CRUD operations for flight bookings, students, and instructors have been implemented in TypeScript with full integration to the Convex schema. The booking system supports 12 operations, including creation with validation, status transitions with enforced business logic, rescheduling with audit trails, note updates, soft deletion, and advanced queries (filtering, conflict detection, statistics). Status transition logic is strictly enforced for all booking states. Student and instructor modules include creation, update, removal (with booking validation), enriched queries, and statistics. Key features include audit logging for all mutations, email uniqueness validation, related data enrichment, robust error handling, efficient index usage, soft delete pattern, analytics queries, and strict TypeScript type safety. All operations are production-ready, validated, and covered by audit trails. Files created: convex/bookings.ts, convex/students.ts, convex/instructors.ts, and convex/index.ts (API barrel export).\n</info added on 2025-11-09T09:40:23.752Z>",
+        "testStrategy": "Write integration tests for all CRUD endpoints. Validate correct status transitions and data integrity after each operation.",
+        "priority": "high",
+        "dependencies": [
+          1
+        ],
+        "status": "done",
+        "subtasks": []
+      },
+      {
+        "id": 3,
+        "title": "Integrate Real-Time Weather Data API",
+        "description": "Set up Convex actions to fetch and cache weather data from OpenWeatherMap or WeatherAPI.com for all relevant locations.",
+        "details": "Implement Convex actions to call the weather API for each active booking's departure, destination, and corridor locations. Store results in Weather Data schema with TTL. Schedule updates every 30–60 minutes using Convex scheduled functions.\n<info added on 2025-11-09T09:47:42.207Z>\nWeather API integration is complete and production-ready. The system includes a comprehensive weather module (convex/weather.ts) with 15 operations covering external API calls, internal mutations, queries, and public mutations. Scheduled functions in convex/crons.ts automate weather monitoring every 30 minutes and cache cleanup every hour, with alternative cron configurations available. Key features implemented: OpenWeatherMap API integration with robust error handling, smart caching (30-minute TTL), automatic unit conversions (meters to miles, m/s to knots, Kelvin to Celsius), weather condition parsing (thunderstorm detection, icing estimation, cloud ceiling), rate limiting (100ms delay between API calls), batch processing for all active bookings, efficient cache lookup, complete error handling and logging, and raw data storage for advanced analysis. Data stored per location includes visibility, ceiling, wind speed/direction, temperature, conditions, thunderstorm and icing flags, timestamps, and raw API response. Files created: convex/weather.ts (450 lines), convex/crons.ts, updated convex/index.ts, and updated README.md with environment setup documentation. Automatic monitoring is running every 30 minutes.\n</info added on 2025-11-09T09:47:42.207Z>",
+        "testStrategy": "Mock API responses and verify correct storage and TTL behavior. Test scheduled function triggers and error handling for API failures.",
+        "priority": "high",
+        "dependencies": [
+          1
+        ],
+        "status": "done",
+        "subtasks": []
+      },
+      {
+        "id": 4,
+        "title": "Develop Weather Conflict Detection Logic",
+        "description": "Implement logic to compare weather data against training-level-specific minimums and flag unsafe bookings.",
+        "details": "For each active booking, retrieve the student's training level and relevant weather data. Apply weather minimums: Student Pilot (clear skies, visibility > 5 mi, winds < 10 kt), Private Pilot (visibility > 3 mi, ceiling > 1000 ft), Instrument Rated (no thunderstorms/icing). Flag conflicts and trigger downstream workflows.\n<info added on 2025-11-09T10:15:39.366Z>\nImplementation of a comprehensive weather conflict detection system is complete. The new module (convex/conflicts.ts) enforces training-level-specific weather minimums for Student Pilot, Private Pilot, and Instrument Rated bookings, with multi-factor violation detection (visibility, ceiling, wind, storms, icing) and severity calculation. Automated conflict detection and status management run every 30 minutes, with full audit logging, conflict resolution tracking, and enriched queries for dashboard integration. The ConflictsDisplay component provides real-time statistics, active conflict lists, severity indicators, manual conflict checks, and weather details. Public queries and mutations support conflict management and statistics, and the system is production-ready.\n</info added on 2025-11-09T10:15:39.366Z>",
+        "testStrategy": "Create unit tests for each training level and weather scenario. Validate correct conflict detection and edge case handling.",
+        "priority": "high",
+        "dependencies": [
+          2,
+          3
+        ],
+        "status": "done",
+        "subtasks": []
+      },
+      {
+        "id": 5,
+        "title": "Integrate AI Rescheduling Suggestion System",
+        "description": "Use Vercel AI SDK to generate at least 3 optimized reschedule options for conflicted bookings, considering student/instructor availability and weather forecasts.",
+        "details": "Implement Convex actions to call the AI SDK with booking, weather, and training level context. Parse structured output (suggestedDates, aiReasoning). Store results in Reschedule Options schema. Ensure AI prompt includes weather minimums and training level logic.\n<info added on 2025-11-09T10:20:26.965Z>\nAI-powered rescheduling system implemented with robust provider fallback and intelligent suggestion logic. The module integrates OpenAI GPT-4 (primary) and Anthropic Claude 3.5 Sonnet (fallback), with a rule-based backup if both AI providers are unavailable. Generates exactly 3 optimal reschedule options per conflict, factoring in student training level, weather minimums, and a 7-day window, with a preference for morning slots (8 AM–12 PM) for weather stability. Each suggestion includes a confidence score (0–100), detailed AI reasoning, and a weather forecast summary. Prompts are engineered to include all training level requirements and current weather constraints. System supports smart deduplication, status tracking (pending, accepted, rejected), and full audit logging. Dashboard integration provides a RescheduleDisplay component showing AI model, generation timestamp, reasoning, options, scores, and weather summaries, with accept/reject actions. API key configuration supports both OpenAI and Anthropic via environment variables. Error handling includes graceful fallback between providers and clear messaging for missing configuration. System is production-ready and fully integrated with booking and weather data modules.\n</info added on 2025-11-09T10:20:26.965Z>",
+        "testStrategy": "Mock AI responses and verify correct parsing and storage. Validate that at least 3 valid options are generated per conflict.",
+        "priority": "high",
+        "dependencies": [
+          4
+        ],
+        "status": "done",
+        "subtasks": []
+      },
+      {
+        "id": 6,
+        "title": "Implement In-App Notification System",
+        "description": "Build a notification queue using Convex actions to alert affected students and instructors in real-time when conflicts or reschedules occur.",
+        "details": "Create notification records linked to bookings. Use Convex actions to send in-app alerts and update notification status. Ensure notifications are triggered by conflict detection and reschedule events.",
+        "testStrategy": "Simulate conflict and reschedule events; verify notifications are created, sent, and status updated. Test delivery to correct recipients.",
+        "priority": "high",
+        "dependencies": [
+          4,
+          5
+        ],
+        "status": "done",
+        "subtasks": []
+      },
+      {
+        "id": 7,
+        "title": "Build Real-Time React Dashboard",
+        "description": "Develop a React (TypeScript) dashboard displaying live flight bookings, weather alerts, and reschedule suggestions with real-time updates.",
+        "details": "Use Convex queries with subscriptions for real-time data. Display bookings, current weather status, active alerts, and reschedule options. Implement filtering and search as per PRD.",
+        "testStrategy": "Manual and automated UI tests to verify real-time updates, correct data display, and filter/search functionality.",
+        "priority": "high",
+        "dependencies": [
+          2,
+          3,
+          4,
+          5,
+          6
+        ],
+        "status": "in-progress",
+        "subtasks": [
+          {
+            "id": 1,
+            "title": "Implement Filtering for Flight Bookings",
+            "description": "Add filtering controls to the dashboard to allow users to filter flight bookings by criteria such as date, status, or weather conflict.",
+            "dependencies": [],
+            "details": "Design and implement filter UI components (dropdowns, checkboxes, etc.) in React (TypeScript). Connect filters to Convex queries with subscriptions so the displayed bookings update in real time based on selected filters. Ensure filters are accessible and performant.",
+            "status": "in-progress",
+            "testStrategy": "Write unit and integration tests to verify that filtering updates the bookings list correctly and that real-time updates respect active filters."
+          },
+          {
+            "id": 2,
+            "title": "Add Search Functionality for Bookings and Alerts",
+            "description": "Enable users to search bookings, weather alerts, and reschedule suggestions using a search bar.",
+            "dependencies": [
+              1
+            ],
+            "details": "Implement a search input component in the dashboard header or sidebar. Integrate with Convex queries to filter results in real time as the user types. Support searching by booking ID, student/instructor name, or alert keywords.",
+            "status": "pending",
+            "testStrategy": "Test that search results update instantly as the user types and that all relevant fields are searchable. Include edge cases (e.g., no results, special characters)."
+          },
+          {
+            "id": 3,
+            "title": "Polish Dashboard UI and Visual Consistency",
+            "description": "Refine the dashboard's visual design for clarity, consistency, and usability, following the PRD and design system.",
+            "dependencies": [
+              1,
+              2
+            ],
+            "details": "Apply consistent spacing, typography, and color schemes using a UI library (e.g., Material UI or Chakra UI). Ensure all components (bookings, alerts, reschedule options) are visually aligned and interactive elements have clear states. Address feedback from design reviews.",
+            "status": "pending",
+            "testStrategy": "Perform visual regression testing and manual UI review to ensure all components match design specs and maintain consistency across the dashboard."
+          },
+          {
+            "id": 4,
+            "title": "Ensure Responsive Design Across Devices",
+            "description": "Adapt the dashboard layout and components to work seamlessly on desktop, tablet, and mobile devices.",
+            "dependencies": [
+              3
+            ],
+            "details": "Use CSS-in-JS or a responsive UI framework to implement breakpoints and flexible layouts. Test all dashboard features (filters, search, alerts) on various screen sizes. Optimize touch targets and navigation for mobile users.",
+            "status": "pending",
+            "testStrategy": "Use browser dev tools and device simulators to verify layout and usability on multiple screen sizes. Write automated tests for critical responsive behaviors."
+          },
+          {
+            "id": 5,
+            "title": "Finalize Production-Ready Features and QA",
+            "description": "Harden the dashboard for production by addressing edge cases, improving error handling, and conducting thorough QA.",
+            "dependencies": [
+              4
+            ],
+            "details": "Add loading and error states for all real-time data queries. Implement accessibility improvements (ARIA labels, keyboard navigation). Conduct end-to-end testing, fix bugs, and prepare deployment scripts. Review for security and performance best practices.",
+            "status": "pending",
+            "testStrategy": "Run comprehensive manual and automated end-to-end tests, including accessibility audits and performance profiling. Verify all acceptance criteria from the PRD are met."
+          }
+        ]
+      },
+      {
+        "id": 8,
+        "title": "Implement Student Training Level Validation",
+        "description": "Ensure all scheduling, conflict detection, and AI logic correctly apply stricter weather minimums based on student training level.",
+        "details": "Enforce training level checks in all relevant backend logic (conflict detection, AI prompts, booking creation). Add UI indicators for training level in dashboard.",
+        "testStrategy": "Test with bookings for each training level and verify correct application of weather minimums and UI display.",
+        "priority": "medium",
+        "dependencies": [
+          4,
+          5,
+          7
+        ],
+        "status": "pending",
+        "subtasks": []
+      },
+      {
+        "id": 9,
+        "title": "Enable Manual Reschedule Confirmation Flow",
+        "description": "Allow users (students/instructors) to manually confirm or select from AI-suggested reschedule options via the dashboard.",
+        "details": "Add UI components for reviewing and confirming reschedule options. Update booking and reschedule status upon confirmation. Log all actions for audit.",
+        "testStrategy": "Simulate manual confirmation and verify booking/reschedule status updates and audit log entries.",
+        "priority": "medium",
+        "dependencies": [
+          5,
+          7
+        ],
+        "status": "pending",
+        "subtasks": []
+      },
+      {
+        "id": 10,
+        "title": "Implement Booking History and Audit Log",
+        "description": "Track all booking, cancellation, and reschedule actions for analysis and compliance.",
+        "details": "Extend Convex schema to include audit log entries for each significant action. Ensure all mutations and actions write to the log. Provide dashboard view for history.",
+        "testStrategy": "Trigger all major workflows and verify audit log entries are created and displayed correctly.",
+        "priority": "medium",
+        "dependencies": [
+          2,
+          5,
+          9
+        ],
+        "status": "pending",
+        "subtasks": []
+      },
+      {
+        "id": 11,
+        "title": "Optimize Weather Data Caching",
+        "description": "Implement caching and TTL for weather data to minimize API calls and ensure up-to-date information.",
+        "details": "Store weather data with timestamps and TTL in Convex. Before making API calls, check cache validity. Purge expired data automatically.",
+        "testStrategy": "Test cache hit/miss logic, TTL expiry, and fallback to API. Validate data freshness and API usage metrics.",
+        "priority": "medium",
+        "dependencies": [
+          3
+        ],
+        "status": "pending",
+        "subtasks": []
+      },
+      {
+        "id": 12,
+        "title": "Prepare Documentation and Demo Deliverables",
+        "description": "Create a clean GitHub repository, README, .env.example, and a demo video showcasing all core flows.",
+        "details": "Document setup, architecture, and usage. Record a 5–10 min demo covering flight creation, conflict detection, AI rescheduling, and notifications. Ensure code is clean and well-commented.",
+        "testStrategy": "Peer review documentation for completeness. Validate demo video covers all required flows.",
+        "priority": "medium",
+        "dependencies": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11
+        ],
+        "status": "pending",
+        "subtasks": []
+      }
+    ],
+    "metadata": {
+      "created": "2025-11-09T09:30:24.285Z",
+      "updated": "2025-11-09T10:50:04.322Z",
+      "description": "Tasks for master context"
+    }
+  }
+}

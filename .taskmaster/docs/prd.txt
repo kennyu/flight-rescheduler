@@ -1,0 +1,127 @@
+Product Requirements Document: Weather Cancellation & AI Rescheduling
+
+Project Summary
+Organization: Flight Schedule Pro
+Category: AI Solution
+Estimated Time: 3–5 days
+Overview: This system will automatically detect potential weather conflicts for scheduled flight lessons and use AI to intelligently manage notifications and suggest optimized rescheduling options. It will monitor weather at all critical locations (takeoff, landing, and flight corridor).
+
+1. Core Objectives
+The primary goals are to automate, optimize, and track the entire weather-related flight disruption process:
+- Automate weather monitoring and flight conflict detection
+- Notify affected students and instructors in real-time
+- Generate AI-powered rescheduling options that consider student training levels and availability
+- Track all booking, cancellation, and reschedule data for analysis
+- Display active flight and weather alerts in a central React dashboard
+
+2. Technical & Learning Goals
+This project focuses on building a modern, robust event-driven system.
+
+Learning Objectives:
+- Build an event-driven notification and scheduling system
+- Integrate real-time weather data APIs
+- Implement AI reasoning for decision-making using AI SDK
+- Work with TypeScript, React, and Convex
+- Design normalized database schemas for flight scheduling
+
+Technical Stack:
+- Frontend: React (TypeScript) with Vite
+- Backend/AI: Convex serverless functions with AI SDK (Vercel)
+- Database: Convex (real-time, TypeScript-native)
+- APIs: OpenWeatherMap or WeatherAPI.com
+- AI: Vercel AI SDK with OpenAI or Anthropic
+
+3. Success Criteria
+The project will be considered a success when all the following criteria are met:
+✅ Weather conflicts are automatically and accurately detected
+✅ Notifications are successfully sent to all affected students and instructors
+✅ AI suggests optimal rescheduling times (3 valid options minimum)
+✅ Database accurately updates bookings and logs all reschedule actions
+✅ Dashboard displays live weather alerts and current flight statuses
+✅ AI logic correctly considers the student's training level (applying stricter weather limits for Student Pilot vs Instrument Rated pilot)
+
+4. Mock Data & Key Specifications
+The system must handle data structured as follows, with the AI specifically using Training Level to apply appropriate Weather Minimums.
+
+Data Models (Convex Schema):
+- Students: id, name, email, phone, trainingLevel (student-pilot, private-pilot, instrument-rated)
+- Flight Bookings: id, studentId, instructorId, scheduledDate, departureLocation (lat/lon), destinationLocation (lat/lon), status (scheduled, cancelled, rescheduled, completed)
+- Weather Data: locationId, timestamp, visibility, ceiling, windSpeed, conditions
+- Reschedule Options: bookingId, suggestedDates (array), aiReasoning, status
+- Notifications: id, bookingId, recipients, type, sentAt, status
+
+Weather Minimums Logic:
+- Student Pilot: Clear skies required, visibility > 5 mi, winds < 10 kt
+- Private Pilot: Visibility > 3 mi, ceiling > 1000 ft
+- Instrument Rated: IMC acceptable (but no thunderstorms or icing)
+
+5. Testing Checklist
+The following tests must pass to ensure stability and correctness:
+- Weather API Integration: System returns valid JSON for each required location
+- Safety Logic: System correctly flags unsafe conditions based on student training level and weather minimums
+- AI Output: AI successfully generates at least 3 valid reschedule options
+- Notification: In-app alerts are sent successfully upon a conflict
+- Dashboard: Displays live alerts and accurate flight statuses with real-time updates
+- Database: Reschedules are logged and tracked correctly in Convex
+- Scheduler: Background weather-monitoring process runs on schedule (via Convex scheduled functions)
+
+6. Deliverables & Metrics
+Required Deliverables:
+- GitHub Repository: Clean code, README documentation, .env.example file
+- Demo Video (5–10 min): Must show flight creation, weather conflict detection, AI-generated reschedules, and notification/confirmation flow
+- Working Dashboard: Real-time updates showing bookings, weather alerts, and reschedule suggestions
+
+Key Metrics to Track:
+- Bookings Created
+- Weather Conflicts Detected
+- Successful Reschedules (System-suggested and confirmed)
+- Average Rescheduling Time (From cancellation to confirmation)
+
+7. Core Features (MVP)
+Priority 1 - Must Have:
+- Convex database schema and setup
+- Flight booking CRUD operations
+- Weather API integration (scheduled checks)
+- Weather conflict detection logic
+- AI rescheduling suggestion system (using AI SDK)
+- Real-time dashboard showing bookings and alerts
+- In-app notification system
+- Student training level validation
+
+Priority 2 - Should Have:
+- Manual reschedule confirmation flow
+- Weather data caching
+- Booking history and audit log
+- Dashboard filtering and search
+
+8. Bonus Features (Optional)
+These features are for consideration if time allows after core deliverables are met:
+- Email notifications (via Resend or similar)
+- SMS notifications
+- Google Calendar integration
+- Historical weather analytics dashboard
+- Predictive cancellation model (ML)
+- Mobile-responsive design improvements
+
+9. Implementation Notes
+Convex-Specific Considerations:
+- Use Convex schema validation for type safety
+- Implement scheduled functions for weather monitoring (every 30-60 minutes)
+- Use Convex mutations for bookings and reschedules
+- Use Convex queries with subscriptions for real-time dashboard
+- Store weather data in Convex with TTL considerations
+- Implement notification queue using Convex actions
+- Use Convex actions for external API calls (weather, AI)
+
+AI Integration:
+- Use Vercel AI SDK for structured output generation
+- Implement system prompts that include training level context
+- Generate 3 reschedule options with reasoning
+- Consider weather forecast data for suggested times
+
+Weather Monitoring:
+- Check weather for all active bookings in next 24-48 hours
+- Compare current/forecast conditions against training level minimums
+- Flag conflicts and trigger AI rescheduling workflow
+- Cache weather data to minimize API calls
+
