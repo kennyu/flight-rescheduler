@@ -10,7 +10,6 @@ dev-debug.log
 node_modules/
 
 # Environment variables
-.env
 
 # Editor directories and files
 .idea
@@ -25,3 +24,5 @@ node_modules/
 .DS_Store
 
 .env.local
+
+convex/_generated/
