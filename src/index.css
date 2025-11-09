@@ -238,3 +238,180 @@ body {
   100% { transform: rotate(360deg); }
 }
 
+/* Button Utilities */
+.btn-primary {
+  padding: 10px 20px;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.btn-primary:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+}
+
+.btn-primary:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.btn-secondary {
+  padding: 10px 20px;
+  background: #6b7280;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.btn-secondary:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(107, 114, 128, 0.4);
+}
+
+.btn-secondary:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* Responsive Design - Mobile First */
+@media screen and (max-width: 640px) {
+  body {
+    padding: 12px;
+  }
+
+  .container {
+    max-width: 100%;
+  }
+
+  .header {
+    padding: 20px;
+  }
+
+  .header h1 {
+    font-size: 24px;
+  }
+
+  .header p {
+    font-size: 14px;
+  }
+
+  .test-sections {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+
+  .test-section {
+    padding: 16px;
+  }
+
+  .test-section h2 {
+    font-size: 20px;
+  }
+
+  /* Stack filter controls vertically on mobile */
+  .test-section > div[style*="grid"] {
+    grid-template-columns: 1fr !important;
+  }
+
+  /* Make buttons stack on mobile */
+  .test-section > div[style*="flex"] {
+    flex-direction: column !important;
+  }
+
+  .test-section button {
+    width: 100%;
+  }
+}
+
+/* Tablet styles */
+@media screen and (min-width: 641px) and (max-width: 1024px) {
+  .container {
+    max-width: 100%;
+  }
+
+  .test-sections {
+    grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+  }
+
+  .test-section h2 {
+    font-size: 22px;
+  }
+}
+
+/* Desktop styles */
+@media screen and (min-width: 1025px) {
+  .container {
+    max-width: 1400px;
+  }
+
+  .test-sections {
+    grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+  }
+}
+
+/* Touch-friendly improvements for mobile */
+@media (hover: none) and (pointer: coarse) {
+  .button,
+  .btn-primary,
+  .btn-secondary,
+  button {
+    min-height: 44px; /* iOS minimum touch target */
+    padding: 12px 20px;
+  }
+
+  input,
+  select {
+    min-height: 44px;
+    font-size: 16px; /* Prevent iOS zoom on focus */
+  }
+
+  .test-section {
+    /* More spacing for touch targets */
+    padding: 20px;
+  }
+
+  .form-group {
+    margin-bottom: 20px;
+  }
+}
+
+/* Print styles */
+@media print {
+  body {
+    background: white;
+    padding: 0;
+  }
+
+  .header {
+    box-shadow: none;
+    border: 1px solid #ddd;
+  }
+
+  .test-section {
+    box-shadow: none;
+    border: 1px solid #ddd;
+    page-break-inside: avoid;
+  }
+
+  .button,
+  .btn-primary,
+  .btn-secondary {
+    display: none;
+  }
+
+  .form-group input,
+  .form-group select {
+    border: 1px solid #ddd;
+  }
+}
+

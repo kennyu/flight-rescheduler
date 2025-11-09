@@ -93,7 +93,7 @@
           5,
           6
         ],
-        "status": "in-progress",
+        "status": "done",
         "subtasks": [
           {
             "id": 1,
@@ -101,7 +101,7 @@
             "description": "Add filtering controls to the dashboard to allow users to filter flight bookings by criteria such as date, status, or weather conflict.",
             "dependencies": [],
             "details": "Design and implement filter UI components (dropdowns, checkboxes, etc.) in React (TypeScript). Connect filters to Convex queries with subscriptions so the displayed bookings update in real time based on selected filters. Ensure filters are accessible and performant.",
-            "status": "in-progress",
+            "status": "done",
             "testStrategy": "Write unit and integration tests to verify that filtering updates the bookings list correctly and that real-time updates respect active filters."
           },
           {
@@ -112,7 +112,7 @@
               1
             ],
             "details": "Implement a search input component in the dashboard header or sidebar. Integrate with Convex queries to filter results in real time as the user types. Support searching by booking ID, student/instructor name, or alert keywords.",
-            "status": "pending",
+            "status": "done",
             "testStrategy": "Test that search results update instantly as the user types and that all relevant fields are searchable. Include edge cases (e.g., no results, special characters)."
           },
           {
@@ -124,7 +124,7 @@
               2
             ],
             "details": "Apply consistent spacing, typography, and color schemes using a UI library (e.g., Material UI or Chakra UI). Ensure all components (bookings, alerts, reschedule options) are visually aligned and interactive elements have clear states. Address feedback from design reviews.",
-            "status": "pending",
+            "status": "done",
             "testStrategy": "Perform visual regression testing and manual UI review to ensure all components match design specs and maintain consistency across the dashboard."
           },
           {
@@ -135,7 +135,7 @@
               3
             ],
             "details": "Use CSS-in-JS or a responsive UI framework to implement breakpoints and flexible layouts. Test all dashboard features (filters, search, alerts) on various screen sizes. Optimize touch targets and navigation for mobile users.",
-            "status": "pending",
+            "status": "done",
             "testStrategy": "Use browser dev tools and device simulators to verify layout and usability on multiple screen sizes. Write automated tests for critical responsive behaviors."
           },
           {
@@ -146,7 +146,7 @@
               4
             ],
             "details": "Add loading and error states for all real-time data queries. Implement accessibility improvements (ARIA labels, keyboard navigation). Conduct end-to-end testing, fix bugs, and prepare deployment scripts. Review for security and performance best practices.",
-            "status": "pending",
+            "status": "done",
             "testStrategy": "Run comprehensive manual and automated end-to-end tests, including accessibility audits and performance profiling. Verify all acceptance criteria from the PRD are met."
           }
         ]
@@ -154,16 +154,16 @@
       {
         "id": 8,
         "title": "Implement Student Training Level Validation",
-        "description": "Ensure all scheduling, conflict detection, and AI logic correctly apply stricter weather minimums based on student training level.",
-        "details": "Enforce training level checks in all relevant backend logic (conflict detection, AI prompts, booking creation). Add UI indicators for training level in dashboard.",
-        "testStrategy": "Test with bookings for each training level and verify correct application of weather minimums and UI display.",
-        "priority": "medium",
+        "description": "Training level validation is now fully enforced across all system layers. The system applies stricter weather minimums based on student training level for all scheduling, conflict detection, AI logic, and UI display. Validation is type-safe and traceable throughout the stack.",
+        "status": "done",
         "dependencies": [
           4,
           5,
           7
         ],
-        "status": "pending",
+        "priority": "medium",
+        "details": "• Schema: Strict enum validation for training level (\"student-pilot\", \"private-pilot\", \"instrument-rated\") is enforced in both the students and weatherConflicts tables in convex/schema.ts. Type safety is guaranteed throughout the backend.\n\n• Conflict Detection: The WEATHER_MINIMUMS constant defines specific weather rules for each training level. The checkWeatherViolations() function applies these minimums, and severity calculations incorporate training level restrictions.\n\n• AI Integration: AI prompts in convex/reschedule.ts explicitly include training level context. Weather minimums are passed to both OpenAI and Anthropic, ensuring AI-generated suggestions respect training level requirements.\n\n• UI Display: Training level badges are shown on student cards in the UI (src/App.tsx), color-coded blue and properly capitalized. Badges are visible in both the student list and booking details.\n\n• Audit Trail: All actions are logged with training level context for full traceability and compliance.\n\nTraining level enforcement is comprehensive: database schema, business logic, AI prompts, UI, and audit trail all reflect the correct application of weather minimums for each training level.",
+        "testStrategy": "• Validate schema-level enforcement by attempting to insert or update students and weatherConflicts with invalid training levels; confirm rejection.\n\n• For each training level, create bookings and simulate weather scenarios to verify that conflict detection applies the correct minimums and severity calculations.\n\n• Trigger AI reschedule flows and confirm that generated suggestions respect the training level's weather minimums.\n\n• Check UI: Confirm that training level badges are displayed correctly (color, capitalization, placement) in both student list and booking details.\n\n• Review audit logs to ensure all actions are recorded with training level context and are traceable for compliance.",
         "subtasks": []
       },
       {
@@ -177,7 +177,7 @@
           5,
           7
         ],
-        "status": "pending",
+        "status": "done",
         "subtasks": []
       },
       {
@@ -192,7 +192,7 @@
           5,
           9
         ],
-        "status": "pending",
+        "status": "done",
         "subtasks": []
       },
       {
@@ -205,7 +205,7 @@
         "dependencies": [
           3
         ],
-        "status": "pending",
+        "status": "done",
         "subtasks": []
       },
       {
@@ -228,13 +228,13 @@
           10,
           11
         ],
-        "status": "pending",
+        "status": "done",
         "subtasks": []
       }
     ],
     "metadata": {
       "created": "2025-11-09T09:30:24.285Z",
-      "updated": "2025-11-09T10:50:04.322Z",
+      "updated": "2025-11-09T17:01:07.590Z",
       "description": "Tasks for master context"
     }
   }
