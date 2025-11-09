@@ -196,7 +196,7 @@ Test the notification system in the dashboard by:
 ## Project Structure
 
 ```
-flight-rescheduler-v2/
+flight-rescheduler/
 ├── convex/
 │   ├── schema.ts           # Database schema (8 tables)
 │   ├── students.ts         # Student CRUD operations

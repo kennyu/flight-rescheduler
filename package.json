@@ -1,5 +1,5 @@
 {
-  "name": "flight-rescheduler-v2",
+  "name": "flight-rescheduler",
   "version": "1.0.0",
   "description": "AI-powered flight lesson rescheduling with weather monitoring",
   "type": "module",
